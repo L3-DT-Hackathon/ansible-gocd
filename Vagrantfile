@@ -1,14 +1,18 @@
+pref_interface = ['en5: Thunderbolt Ethernet', 'eth0']
+vm_interfaces = %x( VBoxManage list bridgedifs | grep ^Name ).gsub(/Name:\s+/, '').split("\n")
+pref_interface = pref_interface.map {|n| n if vm_interfaces.include?(n)}.compact
+$network_interface = pref_interface[0]
 
 Vagrant.configure("2") do |config|
   config.vm.hostname = 'go'
-  config.vm.box = 'opscode-fedora-20'
-  config.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_fedora-20_chef-provisionerless.box'
+  #config.vm.box = 'opscode-fedora-20'
+  #config.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_fedora-20_chef-provisionerless.box'
   # config.vm.box = 'opscode-fedora-19'
   # config.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_fedora-19_chef-provisionerless.box'
   # config.vm.box = 'opscode-centos-6.5'
   # config.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_centos-6.5_chef-provisionerless.box'
-  # config.vm.box = 'opscode-ubuntu-13.10'
-  # config.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-13.10_chef-provisionerless.box'
+  config.vm.box = 'opscode-ubuntu-13.10'
+  config.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-13.10_chef-provisionerless.box'
 
   if Vagrant.has_plugin?("vagrant-cachier")
   	config.cache.scope = :machine
@@ -47,18 +51,22 @@ Vagrant.configure("2") do |config|
         ansible.verbose = ''
         # Use this if you want to override the Role defaults for example to force a specific number of agents.
         ansible.extra_vars = {
-          GOCD_ADMIN_EMAIL: 'tpbrown@gmail.com'
-          # GOCD_AGENT_INSTANCES: 2
+          GOCD_ADMIN_EMAIL: 'ansible-gocd-vagrant@mailinator.com',
+          GOCD_SCM_GIT: true,
+          GOCD_GO_VERSION: '14.3.0-1186',
+          GOCD_AGENT_INSTANCES: 2,
+          GOCD_CONFIGURE: true,
+          GOCD_CONFIGURE_SECURITY: true
       }
 	end
 
 	# machines are defined here...
 
   config.vm.provider :virtualbox do |v|
-    v.customize ["modifyvm", :id, "--memory", "2048"]
+    v.customize ["modifyvm", :id, "--memory", "8192"]
+    v.customize ["modifyvm", :id, "--cpus", "4"]
   end
-  # config.vm.network :private_network, ip: "192.168.50.2"
   config.vm.network "forwarded_port", guest:8153, host: 8153
-
+  #config.vm.network :public_network, :bridge => 'en5: Thunderbolt Ethernet'
 	
 end

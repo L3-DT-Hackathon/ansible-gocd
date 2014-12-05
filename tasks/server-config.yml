@@ -141,8 +141,26 @@
   register: tmp_passfile_contents
   when: tmp_go_passwd.stat.exists == False
 
+- name: Generating password for default user1
+  command: "htpasswd -sbn user1 insecure1"
+  register: tmp_passfile_user1_contents
+  when: tmp_go_passwd.stat.exists == False
+
+- name: Generating password for default user2
+  command: "htpasswd -sbn user2 insecure2"
+  register: tmp_passfile_user2_contents
+  when: tmp_go_passwd.stat.exists == False
+
 - name: Creating default admin user
   lineinfile: "create=yes dest={{ GOCD_PASSWDFILE_PATH }} line='{{ tmp_passfile_contents.stdout }}' group={{ GOCD_GROUP }} mode=0640 owner={{ GOCD_USER }}"
+  when: tmp_go_passwd.stat.exists == False
+
+- name: Creating default user1
+  lineinfile: "create=yes dest={{ GOCD_PASSWDFILE_PATH }} line='{{ tmp_passfile_user1_contents.stdout }}' group={{ GOCD_GROUP }} mode=0640 owner={{ GOCD_USER }}"
+  when: tmp_go_passwd.stat.exists == False
+
+- name: Creating default user2
+  lineinfile: "create=yes dest={{ GOCD_PASSWDFILE_PATH }} line='{{ tmp_passfile_user2_contents.stdout }}' group={{ GOCD_GROUP }} mode=0640 owner={{ GOCD_USER }}"
   when: tmp_go_passwd.stat.exists == False
 
 - name: Wait for Go to start

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cruise xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="cruise-config.xsd" schemaVersion="74">
+  <server artifactsdir="artifacts" agentAutoRegisterKey="insecure_registration_key" commandRepositoryLocation="default" serverId="7d605372-1f2d-40f9-a6c1-fedd31c0a565">
+    <security>
+      <passwordFile path="/etc/go/passwd" />
+      <roles>
+        <role name="dev">
+          <users>
+            <user>user1</user>
+            <user>user2</user>
+          </users>
+        </role>
+        <role name="Fruit">
+          <users>
+            <user>user1</user>
+          </users>
+        </role>
+        <role name="Animal">
+          <users>
+            <user>user2</user>
+            <user>user1</user>
+          </users>
+        </role>
+        <role name="Element">
+          <users>
+            <user>user2</user>
+          </users>
+        </role>
+      </roles>
+      <admins>
+        <user>admin</user>
+      </admins>
+    </security>
+  </server>
+  <pipelines group="Element">
+    <pipeline name="Yttrium">
+      <materials>
+        <git url="https://github.com/L3-DT-Hackathon/Cyclops-Yttrium" materialName="Yttrium" />
+        <pipeline pipelineName="Loon" stageName="defaultStage" materialName="Loon" />
+        <pipeline pipelineName="Mink" stageName="defaultStage" materialName="Mink" />
+        <pipeline pipelineName="Newt" stageName="defaultStage" materialName="Newt" />
+      </materials>
+      <stage name="defaultStage">
+        <jobs>
+          <job name="defaultJob">
+            <tasks>
+              <exec command="/bin/bash">
+                <arg>-c</arg>
+                <arg>echo $SHELL $GO_PIPELINE_LABEL</arg>
+              </exec>
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+    <pipeline name="Zinc">
+      <materials>
+        <git url="https://github.com/L3-DT-Hackathon/Cyclops-Zinc" materialName="Zinc" />
+        <pipeline pipelineName="Newt" stageName="defaultStage" materialName="Newt" />
+        <pipeline pipelineName="Yttrium" stageName="defaultStage" materialName="Yttrium" />
+      </materials>
+      <stage name="defaultStage">
+        <jobs>
+          <job name="defaultJob">
+            <tasks>
+              <exec command="/bin/bash">
+                <arg>-c</arg>
+                <arg>echo $SHELL $GO_PIPELINE_LABEL</arg>
+              </exec>
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+  </pipelines>
+  <pipelines group="Animal">
+    <pipeline name="Loon">
+      <materials>
+        <git url="https://github.com/L3-DT-Hackathon/Cyclops-Loon" materialName="Loon" />
+        <pipeline pipelineName="Apple" stageName="defaultStage" />
+      </materials>
+      <stage name="defaultStage">
+        <jobs>
+          <job name="defaultJob">
+            <tasks>
+              <exec command="/bin/bash">
+                <arg>-c</arg>
+                <arg>echo $SHELL $GO_PIPELINE_LABEL</arg>
+              </exec>
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+    <pipeline name="Mink">
+      <materials>
+        <git url="https://github.com/L3-DT-Hackathon/Cyclops-Mink" materialName="Mink" />
+        <pipeline pipelineName="Banana" stageName="defaultStage" />
+      </materials>
+      <stage name="defaultStage">
+        <jobs>
+          <job name="defaultJob">
+            <tasks>
+              <exec command="/bin/bash">
+                <arg>-c</arg>
+                <arg>echo $SHELL $GO_PIPELINE_LABEL</arg>
+              </exec>
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+    <pipeline name="Newt">
+      <materials>
+        <git url="https://github.com/L3-DT-Hackathon/Cyclops-Newt" materialName="Newt" />
+        <pipeline pipelineName="Banana" stageName="defaultStage" />
+        <pipeline pipelineName="Apple" stageName="defaultStage" materialName="Apple" />
+      </materials>
+      <stage name="defaultStage">
+        <jobs>
+          <job name="defaultJob">
+            <tasks>
+              <exec command="/bin/bash">
+                <arg>-c</arg>
+                <arg>echo $SHELL $GO_PIPELINE_LABEL</arg>
+              </exec>
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+  </pipelines>
+  <pipelines group="Fruit">
+    <pipeline name="Apple">
+      <materials>
+        <git url="https://github.com/L3-DT-Hackathon/Cyclops-Apple" materialName="Apple" />
+      </materials>
+      <stage name="defaultStage">
+        <jobs>
+          <job name="defaultJob">
+            <tasks>
+              <exec command="/bin/bash">
+                <arg>-c</arg>
+                <arg>echo $SHELL $GO_PIPELINE_LABEL</arg>
+              </exec>
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+    <pipeline name="Banana">
+      <materials>
+        <git url="https://github.com/L3-DT-Hackathon/Cyclops-Banana" materialName="Banana" />
+      </materials>
+      <stage name="defaultStage">
+        <jobs>
+          <job name="defaultJob">
+            <tasks>
+              <exec command="/bin/bash">
+                <arg>-c</arg>
+                <arg>echo $SHELL $GO_PIPELINE_LABEL</arg>
+              </exec>
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+  </pipelines>
+  <templates>
+    <pipeline name="Template">
+      <stage name="defaultStage">
+        <jobs>
+          <job name="defaultJob">
+            <tasks>
+              <exec command="/bin/bash">
+                <arg>-c</arg>
+                <arg>echo $SHELL $GO_PIPELINE_LABEL #{MY_PIPELINE_PARAMETER}</arg>
+                <runif status="passed" />
+              </exec>
+            </tasks>
+          </job>
+        </jobs>
+      </stage>
+    </pipeline>
+  </templates>
+  <environments>
+    <environment name="Fruit">
+      <environmentvariables>
+        <variable name="FRUIT">
+          <value>true</value>
+        </variable>
+      </environmentvariables>
+      <agents>
+        <physical uuid="f970e61d-9659-4e2b-a0c1-9cd6f47b863d" />
+      </agents>
+      <pipelines>
+        <pipeline name="Apple" />
+        <pipeline name="Banana" />
+      </pipelines>
+    </environment>
+    <environment name="Animal">
+      <environmentvariables>
+        <variable name="ANIMAL">
+          <value>true</value>
+        </variable>
+      </environmentvariables>
+      <agents>
+        <physical uuid="c65c6006-1d6f-4140-b469-6106e4d3e848" />
+      </agents>
+      <pipelines>
+        <pipeline name="Loon" />
+        <pipeline name="Mink" />
+        <pipeline name="Newt" />
+      </pipelines>
+    </environment>
+    <environment name="Element">
+      <environmentvariables>
+        <variable name="Element">
+          <value>true</value>
+        </variable>
+      </environmentvariables>
+      <agents>
+        <physical uuid="f970e61d-9659-4e2b-a0c1-9cd6f47b863d" />
+        <physical uuid="c65c6006-1d6f-4140-b469-6106e4d3e848" />
+      </agents>
+      <pipelines>
+        <pipeline name="Yttrium" />
+        <pipeline name="Zinc" />
+      </pipelines>
+    </environment>
+  </environments>
+  <agents>
+    <agent hostname="go" ipaddress="10.0.2.15" uuid="c65c6006-1d6f-4140-b469-6106e4d3e848" />
+    <agent hostname="go" ipaddress="10.0.2.15" uuid="f970e61d-9659-4e2b-a0c1-9cd6f47b863d" />
+  </agents>
+</cruise>

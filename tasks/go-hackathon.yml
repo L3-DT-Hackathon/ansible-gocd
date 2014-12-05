@@ -1,0 +1,4 @@
+---
+- name: add hackathon user
+  sudo: yes
+  user: name=hackathon comment="Go hackathon User"
